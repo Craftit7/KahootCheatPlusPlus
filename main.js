@@ -1,18 +1,34 @@
 // main.js
 
 // Modules to control application life and create native browser window
-const { app, BrowserWindow } = require('electron')
-const path = require('path')
+const {
+  app,
+  BrowserWindow,
+  nativeImage
+} = require('electron')
+const path = require('path');
 
-function createWindow () {
+let image = nativeImage.createFromPath(
+  path.join(__dirname, "./build/icon@5x.ico")
+);
+
+function createWindow() {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
+    autoHideMenuBar: true,
+    icon: image.resize({
+      width: 256,
+      height: 256,
+      quality: 'best'
+    }),
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js')
+      preload: path.join(__dirname, 'preload.js'),
     }
-  })
+  });
+  //mainWindow.setMenuBarVisibility(false);
+
 
   // and load the index.html of the app.
   mainWindow.loadFile('index.html')

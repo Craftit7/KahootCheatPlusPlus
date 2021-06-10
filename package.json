@@ -20,7 +20,8 @@
     "electron-builder": "^22.10.5"
   },
   "dependencies": {
-    "electron-squirrel-startup": "^1.0.0"
+    "electron-squirrel-startup": "^1.0.0",
+    "kahoot.js-api": "^2.4.0"
   },
   "config": {
     "forge": {

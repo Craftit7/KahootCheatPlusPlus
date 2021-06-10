@@ -2,19 +2,46 @@
 <html>
   <head>
     <meta charset="UTF-8" />
-    <meta
+    <!--<meta
       http-equiv="Content-Security-Policy"
       content="default-src 'self'; script-src 'self'"
     />
     <meta
       http-equiv="X-Content-Security-Policy"
       content="default-src 'self'; script-src 'self'"
-    />
+    />-->
+    <link rel="stylesheet" href="style.css" />
     <title>KahootCheat++</title>
   </head>
-  <body>
-    <h1 class="title">KahootCheat++!</h1>
+  <body class="rainbow">
+    <div class="index" id="loader"></div>
+    <div class="wrapper" id="wrapper">
+      <h1 class="title">KahootCheat++!</h1>
+      <div class="card">
+        <form action="#" id="submitGameCode">
+          <div class="inputCodeDiv">
+            <input class="inputPin" name="code" placeholder="Enter Code" />
+          </div>
+          <button type="submit" id="submitBtnPin" class="submitCode rainbow">
+            Enter
+          </button>
+        </form>
+      </div>
 
+      <div class="gear"></div>
+      <div class="footer">
+        <div class="footer-text"></div>
+        <div class="buttons">
+          <a
+            href="https://paypal.me/FlashplaysDonations"
+            target="_blank"
+            class="donate"
+            >Donate</a
+          >
+        </div>
+      </div>
+    </div>
+    <div class="wrapper" id="wrapper-2"></div>
     <script src="./renderer.js"></script>
   </body>
 </html>
