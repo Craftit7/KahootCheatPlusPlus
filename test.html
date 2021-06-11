@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Test</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body class="rainbow">
+    <link rel="stylesheet" href="questionPre.css" />
+    <div class="header">
+      <div class="headPad">
+        <div class="quizProgress" id="quizProgress">
+          ${questionIndex+1} of ${totalQuestions}
+        </div>
+        <div class="currentQuestionType" id="currentQuestionType">
+          ${questionName} (Edit in settings)
+        </div>
+      </div>
+    </div>
+
+    <div class="main">
+      <div class="text">Correct</div>
+      <div class="circleCorrect">
+        <i class="errorIcon fas fa-4x fa-check"></i>
+      </div>
+      <div class="text2">You are the ordinal thingy.</div>
+    </div>
+
+    <div class="footer">
+      <div class="name" id="nickname">${playerName}</div>
+      <div class="score" id="score">${score}</div>
+    </div>
+  </body>
+</html>

@@ -1,12 +1,18 @@
 let Kahoot = require('kahoot.js-api');
-const client = new Kahoot();
+let client = new Kahoot({
+    modules: {
+        extraData: true
+    }
+});
 const fetch = require("node-fetch");
 
 class ClientClass {
     constructor() {
         this.QNF = false;
         this.Qid = "";
+        this.Qname = "";
         this.PIN = "";
+        this.joinedBeforeQuizStarts = false;
         this.score = 0;
         this.playerName = null;
     }
@@ -27,7 +33,8 @@ class ClientClass {
                 this.QNF = true
                 return false; //Quiz not found.
             } else {
-                this.Qid = json.entities[0].card.uuid
+                this.Qid = json.entities[0].card.uuid;
+                this.Qname = qname;
                 return this.Qid;
             }
         });
@@ -45,6 +52,11 @@ class ClientClass {
         });
     }
 
+    updateQid(qid) {
+        this.Qid = qid;
+        this.Qname = "Id is entered.";
+    }
+
     async validatePIN(PIN) {
         let uri = `https://kahoot.it/reserve/session/${PIN}/`;
         let text = await (await fetch(uri)).text();
@@ -53,6 +65,7 @@ class ClientClass {
     }
 
     async join(PIN, NAME) {
+        if (client.connected) client = new Kahoot();
         this.PIN = PIN;
         try {
             await client.join(PIN, NAME);

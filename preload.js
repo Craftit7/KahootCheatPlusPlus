@@ -63,12 +63,19 @@ window.addEventListener('DOMContentLoaded', async () => {
               document.getElementById('loader').classList.remove('index');
               document.getElementById('loader').classList.add('instructions');
               document.getElementById('wrapper-2').innerHTML = NC;
-              client.on('Disconnect', Disconnect)
+              client.on('Disconnect', Disconnect);
+              client.on('QuestionEnd', QuestionEnd);
+              client.on('QuestionReady', QuestionReady);
+              client.on('QuestionStart', QuestionStart);
+              client.on('QuizEnd', QuizEnd);
+              client.on('QuizStart', QuizStart);
+              client.on('TimeOver', TimeOver);
 
               // Now this parent if statement will return false.
             });
 
           } else {
+            console.log(clientJoined)
             // <div class="errorMessageDiv"><div class="innerErrorMessage"><i class="far fa-exclamation-circle errorMessageIcon"></i><div class="errorMessage"></div></div></div>
             errorMessage(clientJoined);
           }
@@ -78,12 +85,113 @@ window.addEventListener('DOMContentLoaded', async () => {
   }
 
   // Events for client.
+  function QuizStart(quiz) {
+    client.joinedBeforeQuizStarts = true;
+    document.getElementById('wrapper').style.display = "none";
+    let NC = require('./quizLoading-page')(client.playerName);
+    document.getElementById('loader').classList.add('game');
+    document.getElementById('loader').classList.remove('instructions');
+    document.getElementById('wrapper-2').innerHTML = NC;
+  }
+
+  function TimeOver(Obj) {
+    // Nothing to do here
+  }
+
+  function QuizEnd(Obj) {
+    // Things to do here...
+  }
+
+  function QuestionStart(Obj) {
+    // Things to do here...
+    if (!client.joinedBeforeQuizStarts) {
+      // This means that things are not initialized properly, so we initialize them.
+      document.getElementById('wrapper').style.display = "none";
+      let NC = require('./quizLoading-page')(client.playerName);
+      document.getElementById('loader').classList.add('game');
+      document.getElementById('loader').classList.remove('instructions');
+      document.getElementById('wrapper-2').innerHTML = NC;
+      client.joinedBeforeQuizStarts = true;
+    }
+
+    let options = {}
+
+    if (Obj.gameBlockType.includes("multiple")) {
+      options = {
+        multiple: true
+      };
+    }
+    //let NC = require('./question-page')(Obj, client, options);
+    let NC = require('./questionPre-page')(client.playerName, client.score, Obj.questionIndex, Obj.quizQuestionAnswers.length, client.Qname, {
+      customText: "NORMAL"
+    });
+    document.getElementById('wrapper-2').innerHTML = NC;
+  }
+
+  function QuestionEnd(Obj) {
+    // Things to do here...
+    if (!client.joinedBeforeQuizStarts) {
+      // This means that things are not initialized properly, so we initialize them.
+      document.getElementById('wrapper').style.display = "none";
+      let NC = require('./quizLoading-page')(client.playerName);
+      document.getElementById('loader').classList.add('game');
+      document.getElementById('loader').classList.remove('instructions');
+      document.getElementById('wrapper-2').innerHTML = NC;
+      client.joinedBeforeQuizStarts = true;
+    }
+
+    let NC = require('./questionEnd-page')(Obj, client);
+    document.getElementById('wrapper-2').innerHTML = NC;
+    console.log("Fat Ema")
+  }
+
+  function QuestionReady(Obj) {
+    // Things to do here...
+    if (!client.joinedBeforeQuizStarts) {
+      // This means that things are not initialized properly, so we initialize them.
+      document.getElementById('wrapper').style.display = "none";
+      let NC = require('./quizLoading-page')(client.playerName);
+      document.getElementById('loader').classList.add('game');
+      document.getElementById('loader').classList.remove('instructions');
+      document.getElementById('wrapper-2').innerHTML = NC;
+      client.joinedBeforeQuizStarts = true;
+    }
+
+    // Now we are good to go.
+    if (!Obj.gameBlockType.includes("quiz") && !Obj.gameBlockType.includes("poll")) {
+      let NC = require('./questionPre-page')(client.playerName, client.score, Obj.questionIndex, Obj.quizQuestionAnswers.length, client.Qname, {
+        customText: "NOT_QUIZ"
+      });
+      document.getElementById('wrapper-2').innerHTML = NC;
+    } else {
+      let NC = require('./questionPre-page')(client.playerName, client.score, Obj.questionIndex, Obj.quizQuestionAnswers.length, client.Qname, {
+        customText: "NORMAL"
+      });
+      document.getElementById('wrapper-2').innerHTML = NC;
+    }
+  }
+
   function Disconnect(reason) {
     //Disconnected
-    document.getElementById('wrapper').style.display = "block";
-    document.getElementById('wrapper-2').remove();
+    var ele = document.getElementsByClassName("inputPin")[0];
+    document.getElementById('wrapper').style.display = "flex";
+    document.getElementById('wrapper-2').innerHTML = "";
     document.getElementById('loader').classList.add('index');
     document.getElementById('loader').classList.remove('instructions');
+    document.getElementById('loader').classList.remove('game');
+    for (const e of document.getElementsByTagName('link')) {
+      if (e.getAttribute('href') == "instructions.css") {
+        e.remove();
+      }
+    }
+    var submitBtnName = document.getElementById('submitBtnName');
+    submitBtnName.setAttribute("id", "submitBtnPin");
+    var submitBtnPin = document.getElementById('submitBtnPin');
+    ele.setAttribute("name", "code");
+    ele.removeAttribute("maxlength")
+    ele.setAttribute("placeholder", "Enter Code");
+    submitBtnPin.innerText = "Enter";
+    ele.value = "";
     errorMessage(`Disconnected: ${reason}`)
   }
 
@@ -92,15 +200,21 @@ window.addEventListener('DOMContentLoaded', async () => {
     errorMessageDiv.setAttribute('class', 'errorMessageDiv');
     let innerErrorMessage = document.createElement('div');
     innerErrorMessage.setAttribute('class', 'innerErrorMessage');
-    let icon = document.createElement('i').setAttribute('class', 'far fa-exclamation-circle errorMessageIcon')
-    innerErrorMessage.appendChild(icon);
-    let errorMessage = document.createElement('div').setAttribute('class', 'errorMessage');
+    let iconA = document.createElement('i');
+    iconA.setAttribute('class', 'fa fa-2x fa-exclamation-circle errorMessageIcon')
+    innerErrorMessage.appendChild(iconA);
+    let errorMessage = document.createElement('div');
+    errorMessage.setAttribute('class', 'errorMessage');
     errorMessage.innerHTML = error;
-    errorMessageDiv.appendChild(errorMessage);
+    errorMessage.style.marginLeft = "0.5rem"
+    innerErrorMessage.appendChild(errorMessage);
     errorMessageDiv.appendChild(innerErrorMessage);
-    document.append(errorMessageDiv);
+    errorMessageDiv.style.transform = "translateY(100%)";
+    document.body.append(errorMessageDiv);
+    setTimeout(() => errorMessageDiv.style.transform = "translateY(0)", 500);
     setTimeout(() => {
-      errorMessageDiv.remove();
+      errorMessageDiv.style.transform = "translateY(100%)";
+      //errorMessageDiv.remove();
     }, 5000);
   }
 });
