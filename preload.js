@@ -120,9 +120,9 @@ window.addEventListener('DOMContentLoaded', async () => {
 
     if (Obj.gameBlockType.includes("multiple")) {
       if (Obj.gameBlockType.includes("quiz")) {
-        // Quiz handler Multiple select only 4 possible buttons with the onclick event.
+        // Quiz handler Multiple select only 4 possible buttons with the on form submit event.
       } else if (Obj.gameBlockType.includes("poll")) {
-        // Poll Handler Multiple select with the onclick event.
+        // Poll Handler Multiple select with the on form submit event.
       }
     } else {
       if (Obj.gameBlockType.includes("quiz")) {
