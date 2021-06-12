@@ -140,9 +140,10 @@ window.addEventListener('DOMContentLoaded', async () => {
       client.joinedBeforeQuizStarts = true;
     }
 
+    if (!client.quizQuestionAnswers) return;
+
     let NC = require('./questionEnd-page')(Obj, client);
     document.getElementById('wrapper-2').innerHTML = NC;
-    console.log("Fat Ema")
   }
 
   function QuestionReady(Obj) {
@@ -168,6 +169,7 @@ window.addEventListener('DOMContentLoaded', async () => {
         customText: "NORMAL"
       });
       document.getElementById('wrapper-2').innerHTML = NC;
+      client.quizQuestionAnswers = Obj.quizQuestionAnswers
     }
   }
 
