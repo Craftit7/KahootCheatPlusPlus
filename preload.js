@@ -114,18 +114,36 @@ window.addEventListener('DOMContentLoaded', async () => {
       client.joinedBeforeQuizStarts = true;
     }
 
-    let options = {}
+    if (!Obj.gameBlockType.includes("quiz") && !Obj.gameBlockType.includes("poll")) return;
+
+    let NC;
 
     if (Obj.gameBlockType.includes("multiple")) {
-      options = {
-        multiple: true
-      };
+      if (Obj.gameBlockType.includes("quiz")) {
+        // Quiz handler Multiple select only 4 possible buttons with the onclick event.
+      } else if (Obj.gameBlockType.includes("poll")) {
+        // Poll Handler Multiple select with the onclick event.
+      }
+    } else {
+      if (Obj.gameBlockType.includes("quiz")) {
+        // Quiz number of choices functions with the onclick event.
+        if (Obj.quizQuestionAnswers[Obj.questionIndex] == 2) {
+          NC = require('./questionSingle-page')(Obj, client, true)
+          document.getElementById('wrapper-2').innerHTML = NC;
+          /* onclick s including if is set auto answer and is set quiz id, 
+          automatically call onclick with client.answer. 
+          if (!client.answer) return and make the user himself select the answer. */
+        } else {
+          NC = require('./questionSingle-page')(Obj, client, false)
+          document.getElementById('wrapper-2').innerHTML = NC;
+          // onclick s
+        }
+      } else if (Obj.gameBlockType.includes("poll")) {
+        // Poll Handler with the onclick event.
+      }
     }
-    //let NC = require('./question-page')(Obj, client, options);
-    let NC = require('./questionPre-page')(client.playerName, client.score, Obj.questionIndex, Obj.quizQuestionAnswers.length, client.Qname, {
-      customText: "NORMAL"
-    });
-    document.getElementById('wrapper-2').innerHTML = NC;
+    // let NC = require('./questionSingle-page')(Obj, client, is2)
+
   }
 
   function QuestionEnd(Obj) {
@@ -170,6 +188,7 @@ window.addEventListener('DOMContentLoaded', async () => {
       });
       document.getElementById('wrapper-2').innerHTML = NC;
       client.quizQuestionAnswers = Obj.quizQuestionAnswers
+      // if is set auto answer and is set quiz id, set client.answer with the answer.
     }
   }
 

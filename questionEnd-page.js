@@ -20,6 +20,13 @@ module.exports = (Obj, client) => {
       <div class="circleError">
         <i class="errorIcon fas fa-4x fa-times"></i>
       </div>`
+  } else if (Obj.isCorrect == "submitted") {
+    str += `</div></div>
+    <div class="main">
+      <div class="text">Your answer was submitted.</div>
+      <div class="circleCorrect">
+        <i class="errorIcon fas fa-4x fa-check"></i>
+      </div>`
   } else {
     str += `</div></div>
     <div class="main">
