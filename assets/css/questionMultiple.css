@@ -124,11 +124,11 @@ body {
 }
 
 .red>div {
-    background: url("/assets/img/triangle.png");
+    background: url("../img/triangle.png");
 }
 
 .blue>div {
-    background: url("/assets/img/square.png");
+    background: url("../img/square.png");
     transform: rotate(45deg);
     -webkit-transform: rotate(45deg);
     -moz-transform: rotate(45deg);
@@ -137,11 +137,11 @@ body {
 }
 
 .yellow>div {
-    background: url("/assets/img/circle.png");
+    background: url("../img/circle.png");
 }
 
 .green>div {
-    background: url("/assets/img/square.png");
+    background: url("../img/square.png");
 }
 
 .score {
