@@ -2,7 +2,7 @@ module.exports = (Obj, client) => {
   let str = "";
 
   str += `
-  <link rel="stylesheet" href="questionPre.css" />
+  <link rel="stylesheet" href="../../assets/css/questionPre.css" />
     <div class="header">
       <div class="headPad">
         <div class="quizProgress" id="quizProgress">${Number(Obj.pointsData.lastGameBlockIndex)+1} of ${client.quizQuestionAnswers.length}</div>
@@ -13,19 +13,19 @@ module.exports = (Obj, client) => {
   } else {
     str += `<div class="currentQuestionType" id="currentQuestionType">${client.Qname} (Edit in settings)</div>`
   }
-  if (!Obj.isCorrect) {
-    str += `</div></div>
-    <div class="main">
-      <div class="text">Incorrect</div>
-      <div class="circleError">
-        <i class="errorIcon fas fa-4x fa-times"></i>
-      </div>`
-  } else if (Obj.isCorrect == "submitted") {
+  if ((Obj.type).includes("poll")) {
     str += `</div></div>
     <div class="main">
       <div class="text">Your answer was submitted.</div>
       <div class="circleCorrect">
         <i class="errorIcon fas fa-4x fa-check"></i>
+      </div>`
+  } else if (!Obj.isCorrect) {
+    str += `</div></div>
+    <div class="main">
+      <div class="text">Incorrect</div>
+      <div class="circleError">
+        <i class="errorIcon fas fa-4x fa-times"></i>
       </div>`
   } else {
     str += `</div></div>

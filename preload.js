@@ -4,7 +4,7 @@
 // It has the same sandbox as a Chrome extension.
 //var KahootClient = require('./kahoot-client.js');
 //let client = new KahootClient();
-let client = require('./kahoot-client.js');
+let client = require('./classes/kahoot-client.js');
 
 window.addEventListener('DOMContentLoaded', async () => {
   let PIN, NAME;
@@ -59,7 +59,7 @@ window.addEventListener('DOMContentLoaded', async () => {
             client.on('NameAccept', (Obj) => {
               client.updateName(Obj.playerName);
               document.getElementById('wrapper').style.display = "none";
-              let NC = require('./instructions-page')(Obj.playerName);
+              let NC = require('./pages/quiz/instructions-page')(Obj.playerName);
               document.getElementById('loader').classList.remove('index');
               document.getElementById('loader').classList.add('instructions');
               document.getElementById('wrapper-2').innerHTML = NC;
@@ -88,7 +88,7 @@ window.addEventListener('DOMContentLoaded', async () => {
   function QuizStart(quiz) {
     client.joinedBeforeQuizStarts = true;
     document.getElementById('wrapper').style.display = "none";
-    let NC = require('./quizLoading-page')(client.playerName);
+    let NC = require('./pages/quiz/quizLoading-page')(client.playerName);
     document.getElementById('loader').classList.add('game');
     document.getElementById('loader').classList.remove('instructions');
     document.getElementById('wrapper-2').innerHTML = NC;
@@ -107,7 +107,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     if (!client.joinedBeforeQuizStarts) {
       // This means that things are not initialized properly, so we initialize them.
       document.getElementById('wrapper').style.display = "none";
-      let NC = require('./quizLoading-page')(client.playerName);
+      let NC = require('./pages/quiz/quizLoading-page')(client.playerName);
       document.getElementById('loader').classList.add('game');
       document.getElementById('loader').classList.remove('instructions');
       document.getElementById('wrapper-2').innerHTML = NC;
@@ -128,13 +128,13 @@ window.addEventListener('DOMContentLoaded', async () => {
       if (Obj.gameBlockType.includes("quiz")) {
         // Quiz number of choices functions with the onclick event.
         if (Obj.quizQuestionAnswers[Obj.questionIndex] == 2) {
-          NC = require('./questionSingle-page')(Obj, client, true)
+          NC = require('./pages/question/questionSingle-page')(Obj, client, true)
           document.getElementById('wrapper-2').innerHTML = NC;
           /* onclick s including if is set auto answer and is set quiz id, 
           automatically call onclick with client.answer. 
           if (!client.answer) return and make the user himself select the answer. */
         } else {
-          NC = require('./questionSingle-page')(Obj, client, false)
+          NC = require('./pages/question/questionSingle-page')(Obj, client, false)
           document.getElementById('wrapper-2').innerHTML = NC;
           // onclick s
         }
@@ -151,7 +151,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     if (!client.joinedBeforeQuizStarts) {
       // This means that things are not initialized properly, so we initialize them.
       document.getElementById('wrapper').style.display = "none";
-      let NC = require('./quizLoading-page')(client.playerName);
+      let NC = require('./pages/quiz/quizLoading-page')(client.playerName);
       document.getElementById('loader').classList.add('game');
       document.getElementById('loader').classList.remove('instructions');
       document.getElementById('wrapper-2').innerHTML = NC;
@@ -160,7 +160,7 @@ window.addEventListener('DOMContentLoaded', async () => {
 
     if (!client.quizQuestionAnswers) return;
 
-    let NC = require('./questionEnd-page')(Obj, client);
+    let NC = require('./pages/question/questionEnd-page')(Obj, client);
     document.getElementById('wrapper-2').innerHTML = NC;
   }
 
@@ -169,7 +169,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     if (!client.joinedBeforeQuizStarts) {
       // This means that things are not initialized properly, so we initialize them.
       document.getElementById('wrapper').style.display = "none";
-      let NC = require('./quizLoading-page')(client.playerName);
+      let NC = require('./pages/quiz/quizLoading-page')(client.playerName);
       document.getElementById('loader').classList.add('game');
       document.getElementById('loader').classList.remove('instructions');
       document.getElementById('wrapper-2').innerHTML = NC;
@@ -178,12 +178,12 @@ window.addEventListener('DOMContentLoaded', async () => {
 
     // Now we are good to go.
     if (!Obj.gameBlockType.includes("quiz") && !Obj.gameBlockType.includes("poll")) {
-      let NC = require('./questionPre-page')(client.playerName, client.score, Obj.questionIndex, Obj.quizQuestionAnswers.length, client.Qname, {
+      let NC = require('./pages/question/questionPre-page')(client.playerName, client.score, Obj.questionIndex, Obj.quizQuestionAnswers.length, client.Qname, {
         customText: "NOT_QUIZ"
       });
       document.getElementById('wrapper-2').innerHTML = NC;
     } else {
-      let NC = require('./questionPre-page')(client.playerName, client.score, Obj.questionIndex, Obj.quizQuestionAnswers.length, client.Qname, {
+      let NC = require('./pages/question/questionPre-page')(client.playerName, client.score, Obj.questionIndex, Obj.quizQuestionAnswers.length, client.Qname, {
         customText: "NORMAL"
       });
       document.getElementById('wrapper-2').innerHTML = NC;
@@ -201,7 +201,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('loader').classList.remove('instructions');
     document.getElementById('loader').classList.remove('game');
     for (const e of document.getElementsByTagName('link')) {
-      if (e.getAttribute('href') == "instructions.css") {
+      if (e.getAttribute('href').includes("instructions.css")) {
         e.remove();
       }
     }
