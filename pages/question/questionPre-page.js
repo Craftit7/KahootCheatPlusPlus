@@ -1,6 +1,6 @@
 module.exports = (playerName, score, questionIndex, totalQuestions, questionName, opts) => {
   let str = `
-  <link rel="stylesheet" href="../../assets/css/questionPre.css" />
+  <link rel="stylesheet" href="./assets/css/questionPre.css" />
     <div class="header">
       <div class="headPad">
         <div class="quizProgress" id="quizProgress">${questionIndex+1} of ${totalQuestions}</div>

@@ -2,10 +2,10 @@ module.exports = (Obj, client, is2) => {
   let str = "";
 
   str += `
-    <link rel="stylesheet" href="../../assets/css/questionSingle.css" />
+    <link rel="stylesheet" href="./assets/css/questionSingle.css" />
       <div class="header">
         <div class="headPad">
-          <div class="quizProgress" id="quizProgress">${Number(Obj.pointsData.lastGameBlockIndex)+1} of ${client.quizQuestionAnswers.length}</div>
+          <div class="quizProgress" id="quizProgress">${Number(Obj.questionIndex)+1} of ${client.quizQuestionAnswers.length}</div>
           `;
 
   if (client.Qname == "") {
@@ -27,23 +27,14 @@ module.exports = (Obj, client, is2) => {
     </div>
     
     `
+  } else {
+    str += "</div>"
   }
 
-  if (Obj.rank < 4) {
-    str += `
-          <div class="text2">You are on the podium.</div>
-        </div>
-    `
-  } else {
-    str += `
-          <div class="text2">You are the ${client.ordinal_suffix_of(Obj.rank)}, ${Obj.nemesis.totalScore - Obj.totalScore} points behind ${Obj.nemesis.name}.</div>
-        </div>
-    `
-  }
   str += `
         <div class="footer">
         <div class="name" id="nickname">${client.playerName}</div>
-        <div class="score" id="score">${Obj.totalScore}</div>
+        <div class="score" id="score">${client.totalScore}</div>
       </div>
         `
   return str;

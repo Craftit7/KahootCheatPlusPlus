@@ -2,7 +2,7 @@ module.exports = (Obj, client) => {
   let str = "";
 
   str += `
-  <link rel="stylesheet" href="../../assets/css/questionPre.css" />
+  <link rel="stylesheet" href="./assets/css/questionPre.css" />
     <div class="header">
       <div class="headPad">
         <div class="quizProgress" id="quizProgress">${Number(Obj.pointsData.lastGameBlockIndex)+1} of ${client.quizQuestionAnswers.length}</div>

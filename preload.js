@@ -161,6 +161,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     if (!client.quizQuestionAnswers) return;
 
     let NC = require('./pages/question/questionEnd-page')(Obj, client);
+    client.totalScore = Obj.totalScore;
     document.getElementById('wrapper-2').innerHTML = NC;
   }
 
@@ -178,16 +179,18 @@ window.addEventListener('DOMContentLoaded', async () => {
 
     // Now we are good to go.
     if (!Obj.gameBlockType.includes("quiz") && !Obj.gameBlockType.includes("poll")) {
-      let NC = require('./pages/question/questionPre-page')(client.playerName, client.score, Obj.questionIndex, Obj.quizQuestionAnswers.length, client.Qname, {
+      client.totalScore = Obj.totalScore;
+      let NC = require('./pages/question/questionPre-page')(client.playerName, client.totalScore, Obj.questionIndex, Obj.quizQuestionAnswers.length, client.Qname, {
         customText: "NOT_QUIZ"
       });
       document.getElementById('wrapper-2').innerHTML = NC;
     } else {
-      let NC = require('./pages/question/questionPre-page')(client.playerName, client.score, Obj.questionIndex, Obj.quizQuestionAnswers.length, client.Qname, {
+      let NC = require('./pages/question/questionPre-page')(client.playerName, client.totalScore, Obj.questionIndex, Obj.quizQuestionAnswers.length, client.Qname, {
         customText: "NORMAL"
       });
       document.getElementById('wrapper-2').innerHTML = NC;
-      client.quizQuestionAnswers = Obj.quizQuestionAnswers
+      client.quizQuestionAnswers = Obj.quizQuestionAnswers;
+
       // if is set auto answer and is set quiz id, set client.answer with the answer.
     }
   }

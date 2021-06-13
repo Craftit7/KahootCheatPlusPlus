@@ -13,7 +13,7 @@ class ClientClass {
         this.Qname = "";
         this.PIN = "";
         this.joinedBeforeQuizStarts = false;
-        this.score = 0;
+        this.totalScore = 0;
         this.playerName = null;
     }
 
