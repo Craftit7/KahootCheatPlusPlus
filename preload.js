@@ -100,6 +100,8 @@ window.addEventListener('DOMContentLoaded', async () => {
 
   function QuizEnd(Obj) {
     // Things to do here...
+    NC = require('./pages/quiz/quizEnd-page')(Obj.rank, client)
+    document.getElementById('wrapper-2').innerHTML = NC;
   }
 
   function QuestionStart(Obj) {
@@ -121,8 +123,37 @@ window.addEventListener('DOMContentLoaded', async () => {
     if (Obj.gameBlockType.includes("multiple")) {
       if (Obj.gameBlockType.includes("quiz")) {
         // Quiz handler Multiple select only 4 possible buttons with the on form submit event.
+        NC = require('./pages/question/questionMultiple-page')(Obj, client)
+        document.getElementById('wrapper-2').innerHTML = NC;
+
+        let formEle = document.getElementById('formElementMultiQuestion'),
+          formSubmitButton = document.getElementById('formSubmitButton');
+
+        formEle.onsubmit = (e) => {
+          e.preventDefault();
+        }
+
+        formSubmitButton.onclick = () => {
+          let data = new FormData(formEle);
+          let dataArr = client.returnNumberFromData(data);
+          Obj.answer(dataArr);
+        }
       } else if (Obj.gameBlockType.includes("poll")) {
         // Poll Handler Multiple select with the on form submit event.
+        NC = require('./pages/question/questionMultiple-page')(Obj, client)
+        document.getElementById('wrapper-2').innerHTML = NC;
+        let formEle = document.getElementById('formElementMultiQuestion'),
+          formSubmitButton = document.getElementById('formSubmitButton');
+
+        formEle.onsubmit = (e) => {
+          e.preventDefault();
+        }
+
+        formSubmitButton.onclick = () => {
+          let data = new FormData(formEle);
+          let dataArr = client.returnNumberFromData(data);
+          Obj.answer(dataArr);
+        }
       }
     } else {
       if (Obj.gameBlockType.includes("quiz")) {
@@ -133,13 +164,164 @@ window.addEventListener('DOMContentLoaded', async () => {
           /* onclick s including if is set auto answer and is set quiz id, 
           automatically call onclick with client.answer. 
           if (!client.answer) return and make the user himself select the answer. */
+          let redButton = document.getElementById('red'),
+            blueButton = document.getElementById('blue');
+
+          blueButton.onclick = () => {
+            Obj.answer(0);
+            blueButton.onclick = null;
+            let NC = require('./pages/question/questionPre-page')(client.playerName, client.totalScore, Obj.questionIndex, Obj.quizQuestionAnswers.length, client.Qname, {
+              customText: "WAITING"
+            });
+            document.getElementById('wrapper-2').innerHTML = NC;
+          }
+
+          redButton.onclick = () => {
+            Obj.answer(1);
+            redButton.onclick = null;
+            let NC = require('./pages/question/questionPre-page')(client.playerName, client.totalScore, Obj.questionIndex, Obj.quizQuestionAnswers.length, client.Qname, {
+              customText: "WAITING"
+            });
+            document.getElementById('wrapper-2').innerHTML = NC;
+          }
+
+          if ("settings".autoAnswer) {
+            if (client.choice && client.Qid) {
+              Obj.answer(client.choice);
+              client.choice = null;
+              let NC = require('./pages/question/questionPre-page')(client.playerName, client.totalScore, Obj.questionIndex, Obj.quizQuestionAnswers.length, client.Qname, {
+                customText: "WAITING"
+              });
+              document.getElementById('wrapper-2').innerHTML = NC;
+            }
+          }
         } else {
           NC = require('./pages/question/questionSingle-page')(Obj, client, false)
           document.getElementById('wrapper-2').innerHTML = NC;
           // onclick s
+          let redButton = document.getElementById('red'),
+            blueButton = document.getElementById('blue'),
+            yellowButton = document.getElementById('yellow'),
+            greenButton = document.getElementById('green');
+
+          redButton.onclick = () => {
+            Obj.answer(0);
+            redButton.onclick = null;
+            let NC = require('./pages/question/questionPre-page')(client.playerName, client.totalScore, Obj.questionIndex, Obj.quizQuestionAnswers.length, client.Qname, {
+              customText: "WAITING"
+            });
+            document.getElementById('wrapper-2').innerHTML = NC;
+          }
+
+          blueButton.onclick = () => {
+            Obj.answer(1);
+            blueButton.onclick = null;
+            let NC = require('./pages/question/questionPre-page')(client.playerName, client.totalScore, Obj.questionIndex, Obj.quizQuestionAnswers.length, client.Qname, {
+              customText: "WAITING"
+            });
+            document.getElementById('wrapper-2').innerHTML = NC;
+          }
+
+          yellowButton.onclick = () => {
+            Obj.answer(2);
+            yellowButton.onclick = null;
+            let NC = require('./pages/question/questionPre-page')(client.playerName, client.totalScore, Obj.questionIndex, Obj.quizQuestionAnswers.length, client.Qname, {
+              customText: "WAITING"
+            });
+            document.getElementById('wrapper-2').innerHTML = NC;
+          }
+
+          greenButton.onclick = () => {
+            Obj.answer(3);
+            greenButton.onclick = null;
+            let NC = require('./pages/question/questionPre-page')(client.playerName, client.totalScore, Obj.questionIndex, Obj.quizQuestionAnswers.length, client.Qname, {
+              customText: "WAITING"
+            });
+            document.getElementById('wrapper-2').innerHTML = NC;
+          }
+
+          if ("settings".autoAnswer) {
+            if (client.choice) {
+              Obj.answer(client.choice);
+              client.choice = null;
+              let NC = require('./pages/question/questionPre-page')(client.playerName, client.totalScore, Obj.questionIndex, Obj.quizQuestionAnswers.length, client.Qname, {
+                customText: "WAITING"
+              });
+              document.getElementById('wrapper-2').innerHTML = NC;
+            }
+          }
         }
       } else if (Obj.gameBlockType.includes("poll")) {
         // Poll Handler with the onclick event.
+        if (Obj.quizQuestionAnswers[Obj.questionIndex] == 2) {
+          NC = require('./pages/question/questionSingle-page')(Obj, client, true)
+          document.getElementById('wrapper-2').innerHTML = NC;
+          /* onclick s only user can answer this. */
+          let redButton = document.getElementById('red'),
+            blueButton = document.getElementById('blue');
+
+          redButton.onclick = () => {
+            Obj.answer(0);
+            redButton.onclick = null;
+            let NC = require('./pages/question/questionPre-page')(client.playerName, client.totalScore, Obj.questionIndex, Obj.quizQuestionAnswers.length, client.Qname, {
+              customText: "WAITING"
+            });
+            document.getElementById('wrapper-2').innerHTML = NC;
+          }
+
+          blueButton.onclick = () => {
+            Obj.answer(1);
+            blueButton.onclick = null;
+            let NC = require('./pages/question/questionPre-page')(client.playerName, client.totalScore, Obj.questionIndex, Obj.quizQuestionAnswers.length, client.Qname, {
+              customText: "WAITING"
+            });
+            document.getElementById('wrapper-2').innerHTML = NC;
+          }
+        } else {
+          NC = require('./pages/question/questionSingle-page')(Obj, client, false)
+          document.getElementById('wrapper-2').innerHTML = NC;
+          // onclick s
+          let redButton = document.getElementById('red'),
+            blueButton = document.getElementById('blue'),
+            yellowButton = document.getElementById('yellow'),
+            greenButton = document.getElementById('green');
+
+          redButton.onclick = () => {
+            Obj.answer(0);
+            redButton.onclick = null;
+            let NC = require('./pages/question/questionPre-page')(client.playerName, client.totalScore, Obj.questionIndex, Obj.quizQuestionAnswers.length, client.Qname, {
+              customText: "WAITING"
+            });
+            document.getElementById('wrapper-2').innerHTML = NC;
+          }
+
+          blueButton.onclick = () => {
+            Obj.answer(1);
+            blueButton.onclick = null;
+            let NC = require('./pages/question/questionPre-page')(client.playerName, client.totalScore, Obj.questionIndex, Obj.quizQuestionAnswers.length, client.Qname, {
+              customText: "WAITING"
+            });
+            document.getElementById('wrapper-2').innerHTML = NC;
+          }
+
+          yellowButton.onclick = () => {
+            Obj.answer(2);
+            yellowButton.onclick = null;
+            let NC = require('./pages/question/questionPre-page')(client.playerName, client.totalScore, Obj.questionIndex, Obj.quizQuestionAnswers.length, client.Qname, {
+              customText: "WAITING"
+            });
+            document.getElementById('wrapper-2').innerHTML = NC;
+          }
+
+          greenButton.onclick = () => {
+            Obj.answer(3);
+            greenButton.onclick = null;
+            let NC = require('./pages/question/questionPre-page')(client.playerName, client.totalScore, Obj.questionIndex, Obj.quizQuestionAnswers.length, client.Qname, {
+              customText: "WAITING"
+            });
+            document.getElementById('wrapper-2').innerHTML = NC;
+          }
+        }
       }
     }
     // let NC = require('./questionSingle-page')(Obj, client, is2)
@@ -160,8 +342,8 @@ window.addEventListener('DOMContentLoaded', async () => {
 
     if (!client.quizQuestionAnswers) return;
 
-    let NC = require('./pages/question/questionEnd-page')(Obj, client);
     client.totalScore = Obj.totalScore;
+    let NC = require('./pages/question/questionEnd-page')(Obj, client);
     document.getElementById('wrapper-2').innerHTML = NC;
   }
 
@@ -178,19 +360,17 @@ window.addEventListener('DOMContentLoaded', async () => {
     }
 
     // Now we are good to go.
-    if (!Obj.gameBlockType.includes("quiz") && !Obj.gameBlockType.includes("poll")) {
-      client.totalScore = Obj.totalScore;
+    if (Obj.gameBlockType.includes("content")) { //*Obj.gameBlockType.includes("quiz") || Obj.gameBlockType.includes("poll")
       let NC = require('./pages/question/questionPre-page')(client.playerName, client.totalScore, Obj.questionIndex, Obj.quizQuestionAnswers.length, client.Qname, {
         customText: "NOT_QUIZ"
       });
       document.getElementById('wrapper-2').innerHTML = NC;
     } else {
+      client.quizQuestionAnswers = Obj.quizQuestionAnswers;
       let NC = require('./pages/question/questionPre-page')(client.playerName, client.totalScore, Obj.questionIndex, Obj.quizQuestionAnswers.length, client.Qname, {
         customText: "NORMAL"
       });
       document.getElementById('wrapper-2').innerHTML = NC;
-      client.quizQuestionAnswers = Obj.quizQuestionAnswers;
-
       // if is set auto answer and is set quiz id, set client.answer with the answer.
     }
   }

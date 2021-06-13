@@ -14,21 +14,23 @@ module.exports = (Obj, client, is2) => {
     str += `<div class="currentQuestionType" id="currentQuestionType">${client.Qname} (Edit in settings)</div>`
   }
 
-  str += `
-    </div></div>
+  str += `</div></div>`;
+  if (is2) {
+    str += `
+    <div class="main">
+      <button class="blue" id="blue"><div></div></button>
+      <button class="red" id="red"><div></div></button>
+    </div>
+    `
+  } else {
+    str += `
     <div class="main">
       <button class="red" id="red"><div></div></button>
       <button class="blue" id="blue"><div></div></button>
-      `;
-  if (!is2) {
-    str += `
       <button class="yellow" id="yellow"><div></div></button>
       <button class="green" id="green"><div></div></button>
     </div>
-    
     `
-  } else {
-    str += "</div>"
   }
 
   str += `

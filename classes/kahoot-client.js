@@ -9,9 +9,10 @@ const fetch = require("node-fetch");
 class ClientClass {
     constructor() {
         this.QNF = false;
-        this.Qid = "";
+        this.Qid = null;
         this.Qname = "";
         this.PIN = "";
+        this.choice = null;
         this.joinedBeforeQuizStarts = false;
         this.totalScore = 0;
         this.playerName = null;
@@ -24,6 +25,20 @@ class ClientClass {
     getThis() {
         return this;
     }
+
+    returnNumberFromData(formData) {
+        let data = [];
+        for (let key of formData.entries()) {
+            if (key[0] == "red-input") data.push(0);
+            if (key[0] == "blue-input") data.push(1);
+            if (key[0] == "yellow-input") data.push(2);
+            if (key[0] == "green-input") data.push(3);
+        }
+        return data;
+
+    }
+
+    async getAnswer() {}
 
     async getQidFromQname(qname) {
         let uri = `https://create.kahoot.it/rest/kahoots/?query=${qname}&limit=20&cursor=1&searchCluster=20`;

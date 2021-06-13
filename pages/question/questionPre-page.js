@@ -12,7 +12,7 @@ module.exports = (playerName, score, questionIndex, totalQuestions, questionName
     str += `<div class="currentQuestionType" id="currentQuestionType">${questionName} (Edit in settings)</div>`
   }
 
-  if (opts.customText != "NOT_QUIZ") {
+  if (opts.customText == "NORMAL") {
     str += `
       </div>
     </div>
@@ -28,7 +28,7 @@ module.exports = (playerName, score, questionIndex, totalQuestions, questionName
       <div class="score" id="score">${score}</div>
     </div>
   `
-  } else {
+  } else if (opts.customText == "NOT_QUIZ") {
     str += `
     </div>
   </div>
@@ -44,6 +44,22 @@ module.exports = (playerName, score, questionIndex, totalQuestions, questionName
     <div class="score" id="score">${score}</div>
   </div>
 `
+  } else if (opts.customText == "WAITING") {
+    str += `
+      </div>
+    </div>
+
+    <div class="main">
+      <div class="text">You answered this question</div>
+      <div class="parent-circle"><div class="loading-circle"></div></div>
+      <div class="text2">Waiting for others to answer...</div>
+    </div>
+
+    <div class="footer">
+      <div class="name" id="nickname">${playerName}</div>
+      <div class="score" id="score">${score}</div>
+    </div>
+  `
   }
 
   return str;
