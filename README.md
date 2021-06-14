@@ -14,4 +14,6 @@ To download, goto the tags section and to the releases, download the latest one.
 
 For Linux and MacOS, I cant compile it. You can clone this repo and run npm install, then npm start.
 
-## If you have any issues open an issue
+## If you have any issues open an issue, If you found a bug that you can fix, please fix it and open a pr
+
+Help me continue this project! [Donate](https://paypal.me/FlashplaysDonations)
