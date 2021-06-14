@@ -9,6 +9,15 @@ let client = require('./classes/kahoot-client.js');
 window.addEventListener('DOMContentLoaded', async () => {
   let PIN, NAME;
 
+  let settings = document.getElementById('settings');
+  console.log(settings)
+
+  settings.onclick = () => {
+    document.getElementById('settings-wrapper').classList.toggle("settings-show");
+    document.getElementById('settings-wrapper').classList.toggle("settings-hide");
+    settings.classList.toggle('down');
+  }
+
   // On index page.
   if (document.getElementsByClassName('index')[0]) {
 
@@ -116,8 +125,8 @@ window.addEventListener('DOMContentLoaded', async () => {
       client.joinedBeforeQuizStarts = true;
     }
 
-    if (!Obj.gameBlockType.includes("quiz") && !Obj.gameBlockType.includes("poll")) return;
-
+    if (Obj.gameBlockType.includes("content")) return;
+    //console.log(Obj.gameBlockLayout)
     let NC;
 
     if (Obj.gameBlockType.includes("multiple")) {
@@ -159,7 +168,11 @@ window.addEventListener('DOMContentLoaded', async () => {
       if (Obj.gameBlockType.includes("quiz")) {
         // Quiz number of choices functions with the onclick event.
         if (Obj.quizQuestionAnswers[Obj.questionIndex] == 2) {
-          NC = require('./pages/question/questionSingle-page')(Obj, client, true)
+          if (Obj.gameBlockLayout == "TRUE_FALSE") {
+            NC = require('./pages/question/questionSingle-page')(Obj, client, true, true)
+          } else {
+            NC = require('./pages/question/questionSingle-page')(Obj, client, true, false)
+          }
           document.getElementById('wrapper-2').innerHTML = NC;
           /* onclick s including if is set auto answer and is set quiz id, 
           automatically call onclick with client.answer. 
@@ -168,7 +181,7 @@ window.addEventListener('DOMContentLoaded', async () => {
             blueButton = document.getElementById('blue');
 
           blueButton.onclick = () => {
-            Obj.answer(0);
+            Obj.answer((Obj.gameBlockLayout == "TRUE_FALSE") ? 0 : 1);
             blueButton.onclick = null;
             let NC = require('./pages/question/questionPre-page')(client.playerName, client.totalScore, Obj.questionIndex, Obj.quizQuestionAnswers.length, client.Qname, {
               customText: "WAITING"
@@ -177,7 +190,7 @@ window.addEventListener('DOMContentLoaded', async () => {
           }
 
           redButton.onclick = () => {
-            Obj.answer(1);
+            Obj.answer((Obj.gameBlockLayout == "TRUE_FALSE") ? 1 : 0);
             redButton.onclick = null;
             let NC = require('./pages/question/questionPre-page')(client.playerName, client.totalScore, Obj.questionIndex, Obj.quizQuestionAnswers.length, client.Qname, {
               customText: "WAITING"

@@ -1,4 +1,4 @@
-module.exports = (Obj, client, is2) => {
+module.exports = (Obj, client, is2, trueFalse) => {
   let str = "";
 
   str += `
@@ -16,12 +16,21 @@ module.exports = (Obj, client, is2) => {
 
   str += `</div></div>`;
   if (is2) {
-    str += `
-    <div class="main">
-      <button class="blue" id="blue"><div></div></button>
-      <button class="red" id="red"><div></div></button>
-    </div>
-    `
+    if (trueFalse) {
+      str += `
+      <div class="main">
+        <button class="blue" id="blue"><div></div></button>
+        <button class="red" id="red"><div></div></button>
+      </div>
+      `
+    } else {
+      str += `
+        <div class="main">
+          <button class="red" id="red"><div></div></button>
+          <button class="blue" id="blue"><div></div></button>
+        </div>
+        `
+    }
   } else {
     str += `
     <div class="main">
