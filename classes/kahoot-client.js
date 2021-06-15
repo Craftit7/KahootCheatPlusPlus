@@ -22,6 +22,25 @@ class ClientClass {
         return this.playerName;
     }
 
+    async makeChoice(Obj) {
+        let Qindex = Obj.index;
+
+        let uri = "https://create.kahoot.it/rest/kahoots/" + this.Qid + "/card/?includeKahoot=true";
+        let json = await (await fetch(uri)).json();
+        let choice;
+        let question = json.kahoot.questions[Qindex];
+        let correctAnswers = question.choices;
+        if (!question.type.includes("quiz")) return;
+        if ((question.type).includes("multiple")) choice = [];
+        for (const ans of correctAnswers) {
+            if (ans.correct) {
+                if ((question.type).includes("multiple")) choice.push(correctAnswers.indexOf(ans))
+                else choice = correctAnswers.indexOf(ans)
+            }
+        }
+        this.choice = choice;
+    }
+
     getThis() {
         return this;
     }
@@ -41,35 +60,38 @@ class ClientClass {
     async getAnswer() {}
 
     async getQidFromQname(qname) {
-        let uri = `https://create.kahoot.it/rest/kahoots/?query=${qname}&limit=20&cursor=1&searchCluster=20`;
-        await fetch(uri).then(async res => await res.json()).then(json => {
-            //fetch
-            if (json.totalHits < 1) {
-                this.QNF = true
-                return false; //Quiz not found.
-            } else {
-                this.Qid = json.entities[0].card.uuid;
-                this.Qname = qname;
-                return this.Qid;
-            }
-        });
+        let uri = `https://create.kahoot.it/rest/kahoots/?query=${qname}&limit=20&cursor=0&searchCluster=20`;
+        let json = await (await fetch(uri)).json()
+
+        if (json.totalHits < 1) {
+            this.QNF = true
+            return false; //Quiz not found.
+        } else {
+            this.Qid = json.entities[0].card.uuid;
+            this.Qname = qname;
+            return true;
+        }
+
     }
 
     async validateQid(Qid) {
-        let regEx = /(?:[[:alnum:]]{8})-(?:[[:alnum:]]{4})-(?:[[:alnum:]]{4})-(?:[[:alnum:]]{4})-(?:[[:alnum:]]{12})/gm
-        if (!regEx.test(Qid)) return false;
+        // console.log(Qid)
+        // let regEx = new RegExp('[[:alnum:]]{8}-[[:alnum:]]{4}-[[:alnum:]]{4}-[[:alnum:]]{4}-[[:alnum:]]{12}')
+        // console.log("why", regEx.test(Qid))
+        // if (regEx.exec(Qid) == null) return false;
         let uri = "https://create.kahoot.it/rest/kahoots/" + Qid + "/card/?includeKahoot=true";
-        await fetch(uri).then(async res => await res.json()).then(json => {
-            if (!json.error) return true;
-            if (json.error == "NOT_FOUND") return "NOT_FOUND";
-            if (json.error == "FORBIDDEN") return "FORBIDDEN";
-            return true;
-        });
+        let json = await (await fetch(uri)).json();
+
+        if (json.error) return false;
+        return true;
     }
 
-    updateQid(qid) {
+    async updateQid(qid) {
         this.Qid = qid;
-        this.Qname = "Id is entered.";
+        let uri = "https://create.kahoot.it/rest/kahoots/" + qid + "/card/?includeKahoot=true";
+        await fetch(uri).then(async res => await res.json()).then(json => {
+            this.Qname = json.card.title;
+        });
     }
 
     async validatePIN(PIN) {
@@ -127,6 +149,7 @@ let clientC = new ClientClass()
 
 client.on("Joined", () => {
     console.log(`I joined the Game!\n`);
+    clientC.score = 0;
 });
 
 module.exports = clientC;

@@ -1,5 +1,7 @@
 // JavaScript.
-let inputPin = document.getElementsByClassName('inputPin')[0];
-inputPin.addEventListener('input', () => {
-    inputPin.classList.remove('error');
-});
+let inputs = document.getElementsByTagName('input');
+for (let inputPin of inputs) {
+    inputPin.addEventListener('input', () => {
+        inputPin.classList.remove('error');
+    });
+}

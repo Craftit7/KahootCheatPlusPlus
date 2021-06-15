@@ -1,6 +1,6 @@
 class Settings {
     constructor() {
-        this.autoAnswer = false;
+        this.autoAnswer = true;
         this.answerDelay = 0;
     }
 }

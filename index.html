@@ -11,6 +11,17 @@
       content="default-src 'self'; script-src 'self'"
     />-->
     <link rel="stylesheet" href="./assets/css/style.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
+      crossorigin="anonymous"
+    ></script>
     <title>KahootCheat++</title>
   </head>
   <body class="rainbow">
@@ -46,8 +57,59 @@
       </div>
     </div>
     <div class="wrapper" id="wrapper-2"></div>
-    <span class="gear fa fa-6x fa-cog settings-hide" id="settings"></span>
-    <div class="" id="settings-wrapper"></div>
+    <span class="gear fa fa-6x fa-cog" id="settings"></span>
+    <div class="settings-hide" id="settings-wrapper">
+      <form id="settings-form">
+        <div class="form-group">
+          <label for="Qname" class="Qnamelbl">Quiz Name</label>
+          <input
+            type="text"
+            class="form-control"
+            id="Qname"
+            aria-describedby="emailHelp"
+            name="Qname"
+            placeholder="Quiz Name"
+          />
+          <small id="emailHelp" class="form-text text-mute"
+            >Please wait until you see the quiz name from the teacher (At quiz
+            start).</small
+          >
+        </div>
+        <div class="form-group">
+          <label for="Qid">Quiz ID</label>
+          <input
+            type="text"
+            class="form-control"
+            id="Qid"
+            name="Qid"
+            placeholder="Quiz ID"
+          />
+        </div>
+        <div class="form-group">
+          <input
+            type="checkbox"
+            class="form-check-input"
+            id="manualMode"
+            name="manualMode"
+            value=""
+          />
+          <label for="manualMode" class="form-check-label">Manual Mode</label>
+        </div>
+        <div class="form-group">
+          <label for="answerCooldown">Time to wait before each answer</label>
+          <input
+            type="text"
+            class="form-control"
+            id="answerCooldown"
+            name="answerCooldown"
+            placeholder="Time to wait in seconds"
+          />
+        </div>
+        <button type="submit" id="settings-form-submit" class="btn btn-primary">
+          Save
+        </button>
+      </form>
+    </div>
     <script src="./assets/js/renderer.js"></script>
   </body>
 </html>

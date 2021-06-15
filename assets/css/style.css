@@ -9,6 +9,30 @@
     overflow: hidden;
 }
 
+#settings-form>*,
+#settings-form-submit {
+    padding-left: 1rem;
+}
+
+#settings-form-submit {
+    margin-top: 16px;
+    padding-left: 1rem;
+    margin-left: 1rem;
+}
+
+#Qid {
+    margin-bottom: 16px;
+}
+
+.Qnamelbl {
+    padding-top: 1rem;
+}
+
+label,
+small {
+    color: rgb(255, 255, 255) !important;
+}
+
 .gear {
     position: absolute;
     pointer-events: all;
@@ -18,6 +42,7 @@
     transition: all 1s ease;
     overflow: hidden;
     color: rgb(68, 63, 63);
+    opacity: 75%;
     z-index: 100;
 }
 
@@ -111,10 +136,12 @@
 }
 
 .enter {
-    -webkit-appearance: auto;
-    -moz-appearance: auto;
+    -webkit-appearance: button;
+    -moz-appearance: button;
     appearance: auto;
     -webkit-writing-mode: horizontal-tb !important;
+    -ms-writing-mode: lr-tb !important;
+    writing-mode: horizontal-tb !important;
     text-rendering: auto;
     color: -internal-light-dark(black, white);
     letter-spacing: normal;

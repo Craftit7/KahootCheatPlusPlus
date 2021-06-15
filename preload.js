@@ -1,20 +1,54 @@
-// preload.js
-
-// All of the Node.js APIs are available in the preload process.
-// It has the same sandbox as a Chrome extension.
-//var KahootClient = require('./kahoot-client.js');
-//let client = new KahootClient();
 let client = require('./classes/kahoot-client.js');
+let settingsClass = require('./classes/settings.js');
 
 window.addEventListener('DOMContentLoaded', async () => {
   let PIN, NAME;
 
   let settings = document.getElementById('settings');
-  console.log(settings)
+  let settingsWrapper = document.getElementById('settings-wrapper');
+  let settingsForm = document.getElementById('settings-form')
+  let QidEle = document.getElementById('Qid');
+  let QnameEle = document.getElementById('Qname');
+  document.getElementById('answerCooldown').value = settingsClass.answerDelay;
+  QidEle.value = client.Qid;
+  QnameEle.value = client.Qname;
+  settingsForm.onsubmit = (e) => {
+    e.preventDefault();
+  }
+  document.getElementById('settings-form-submit').onclick = async () => {
+    let formData = new FormData(settingsForm);
+    let data = {};
+    for (let i of formData.entries()) {
+      data[i[0]] = i[1];
+    }
+
+    if (data.manualMode) settingsClass.autoAnswer = false;
+    else settingsClass.autoAnswer = true;
+
+    if (!isNaN(data.answerCooldown)) settingsClass.answerDelay = data.answerCooldown;
+    if (isNaN(data.answerCooldown)) return document.getElementById('answerCooldown').classList.add('error')
+    if (data.Qid) {
+      let QidValid = await client.validateQid(data.Qid);
+      if (!QidValid) return document.getElementById('Qid').classList.add('error')
+      else {
+        settings.click();
+        await client.updateQid(data.Qid);
+      }
+    } else if (data.Qname) {
+      let QnameValid = await client.getQidFromQname(data.Qname);
+      if (!QnameValid) return document.getElementById('Qname').classList.add('error')
+      else settings.click();
+    }
+
+
+  }
 
   settings.onclick = () => {
-    document.getElementById('settings-wrapper').classList.toggle("settings-show");
-    document.getElementById('settings-wrapper').classList.toggle("settings-hide");
+    document.getElementById('answerCooldown').value = settingsClass.answerDelay;
+    QidEle.value = client.Qid;
+    QnameEle.value = client.Qname;
+    settingsWrapper.classList.toggle("settings-show");
+    settingsWrapper.classList.toggle("settings-hide");
     settings.classList.toggle('down');
   }
 
@@ -84,8 +118,7 @@ window.addEventListener('DOMContentLoaded', async () => {
             });
 
           } else {
-            console.log(clientJoined)
-            // <div class="errorMessageDiv"><div class="innerErrorMessage"><i class="far fa-exclamation-circle errorMessageIcon"></i><div class="errorMessage"></div></div></div>
+            //console.log(clientJoined)
             errorMessage(clientJoined);
           }
         }
@@ -125,9 +158,9 @@ window.addEventListener('DOMContentLoaded', async () => {
       client.joinedBeforeQuizStarts = true;
     }
 
-    if (Obj.gameBlockType.includes("content")) return;
     //console.log(Obj.gameBlockLayout)
     let NC;
+
 
     if (Obj.gameBlockType.includes("multiple")) {
       if (Obj.gameBlockType.includes("quiz")) {
@@ -146,6 +179,16 @@ window.addEventListener('DOMContentLoaded', async () => {
           let data = new FormData(formEle);
           let dataArr = client.returnNumberFromData(data);
           Obj.answer(dataArr);
+        }
+        if (client.choice != null) {
+          setTimeout(() => {
+            Obj.answer(client.choice);
+            client.choice = false;
+            let NC = require('./pages/question/questionPre-page')(client.playerName, client.totalScore, Obj.questionIndex, Obj.quizQuestionAnswers.length, client.Qname, {
+              customText: "WAITING"
+            });
+            document.getElementById('wrapper-2').innerHTML = NC;
+          }, (settingsClass.answerDelay * 1000));
         }
       } else if (Obj.gameBlockType.includes("poll")) {
         // Poll Handler Multiple select with the on form submit event.
@@ -198,15 +241,17 @@ window.addEventListener('DOMContentLoaded', async () => {
             document.getElementById('wrapper-2').innerHTML = NC;
           }
 
-          if ("settings".autoAnswer) {
-            if (client.choice && client.Qid) {
+
+          if (client.choice != null) {
+
+            setTimeout(() => {
               Obj.answer(client.choice);
-              client.choice = null;
+              client.choice = false;
               let NC = require('./pages/question/questionPre-page')(client.playerName, client.totalScore, Obj.questionIndex, Obj.quizQuestionAnswers.length, client.Qname, {
                 customText: "WAITING"
               });
               document.getElementById('wrapper-2').innerHTML = NC;
-            }
+            }, (settingsClass.answerDelay * 1000));
           }
         } else {
           NC = require('./pages/question/questionSingle-page')(Obj, client, false)
@@ -253,15 +298,17 @@ window.addEventListener('DOMContentLoaded', async () => {
             document.getElementById('wrapper-2').innerHTML = NC;
           }
 
-          if ("settings".autoAnswer) {
-            if (client.choice) {
+          //* Reaches here
+          if (client.choice != null) {
+
+            setTimeout(() => {
               Obj.answer(client.choice);
-              client.choice = null;
+              client.choice = false;
               let NC = require('./pages/question/questionPre-page')(client.playerName, client.totalScore, Obj.questionIndex, Obj.quizQuestionAnswers.length, client.Qname, {
                 customText: "WAITING"
               });
               document.getElementById('wrapper-2').innerHTML = NC;
-            }
+            }, (settingsClass.answerDelay * 1000));
           }
         }
       } else if (Obj.gameBlockType.includes("poll")) {
@@ -385,6 +432,9 @@ window.addEventListener('DOMContentLoaded', async () => {
       });
       document.getElementById('wrapper-2').innerHTML = NC;
       // if is set auto answer and is set quiz id, set client.answer with the answer.
+    }
+    if (settingsClass.autoAnswer) {
+      client.makeChoice(Obj);
     }
   }
 
