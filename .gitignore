@@ -7,3 +7,9 @@ KahootCheat++-*x64
 windows_installer
 build_installer.js
 *_installer
+*/out
+*/test.html
+*/KahootCheat++-*x64
+*/windows_installer
+*/build_installer.js
+*/*_installer
