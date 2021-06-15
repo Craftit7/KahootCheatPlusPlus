@@ -21,7 +21,8 @@
   },
   "dependencies": {
     "electron-squirrel-startup": "^1.0.0",
-    "kahoot.js-api": "^2.4.0"
+    "kahoot.js-api": "^2.4.0",
+    "node-fetch": "^2.6.1"
   },
   "config": {
     "forge": {

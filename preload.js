@@ -481,7 +481,6 @@ window.addEventListener('DOMContentLoaded', async () => {
     setTimeout(() => errorMessageDiv.style.transform = "translateY(0)", 500);
     setTimeout(() => {
       errorMessageDiv.style.transform = "translateY(100%)";
-      //errorMessageDiv.remove();
     }, 5000);
   }
 });
